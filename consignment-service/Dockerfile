@@ -11,7 +11,7 @@
 FROM golang:1.11.2 as builder
 
 
-WORKDIR /go/src/github.com/kalmeshbhavi/shipper/consignment-service
+WORKDIR /go/src/github.com/shipper/consignment-service
 
 
 COPY . .
@@ -29,6 +29,6 @@ RUN apk --no-cache add ca-certificates
 RUN mkdir /app
 WORKDIR /app
 
-COPY --from=builder /go/src/github.com/kalmeshbhavi/shipper/consignment-service/consignment-service .
+COPY --from=builder /go/src/github.com/shipper/consignment-service/consignment-service .
 
 CMD ["./consignment-service"]
