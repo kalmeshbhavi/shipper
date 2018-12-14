@@ -70,6 +70,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:e192b74b1d026de1d57b34a45ed4f6283083078b6acf45be57f215b3e2750aad"
+  name = "github.com/kalmeshbhavi/shipper"
+  packages = ["vessel-service/proto/vessel"]
+  pruneopts = "UT"
+  revision = "3592508b724818e845d51da17ba43a02ae011a14"
+
+[[projects]]
+  branch = "master"
   digest = "1:0d3455926b7b805da0ba04fe325ad7662f47c0b6522500a2d787667e2fb6e463"
   name = "github.com/micro/cli"
   packages = ["."]
@@ -257,9 +265,9 @@
   analyzer-version = 1
   input-imports = [
     "github.com/golang/protobuf/proto",
+    "github.com/kalmeshbhavi/shipper/vessel-service/proto/vessel",
     "github.com/micro/go-micro",
     "github.com/micro/go-micro/client",
-    "github.com/micro/go-micro/cmd",
     "github.com/micro/go-micro/server",
     "golang.org/x/net/context",
   ]

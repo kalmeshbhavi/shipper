@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	pb "github.com/kalmeshbhavi/shipper/consignment-service/proto/consignment"
+	vesselProto "github.com/kalmeshbhavi/shipper/vessel-service/proto/vessel"
 	"github.com/micro/go-micro"
-	pb "github.com/shipper/consignment-service/proto/consignment"
-	vesselProto "github.com/shipper/vessel-service/proto/vessel"
 
 	"golang.org/x/net/context"
 )

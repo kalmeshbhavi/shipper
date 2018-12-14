@@ -12,7 +12,7 @@
 #            -e MICRO_REGISTRY=mdns consignment-service
 
 build:
-	protoc -I. --go_out=plugins=micro:$(GOPATH)/src/github.com/shipper/consignment-service \
+	protoc -I. --go_out=plugins=micro:$(GOPATH)/src/github.com/kalmeshbhavi/shipper/consignment-service \
 		proto/consignment/consignment.proto
 	docker build -t consignment-service .
 

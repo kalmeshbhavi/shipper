@@ -1,0 +1,6 @@
+.envrc
+vendor/
+bin/
+*/vendor
+
+.idea/
