@@ -5,66 +5,42 @@ import (
 	pb "github.com/kalmeshbhavi/shipper/consignment-service/proto/consignment"
 	vesselProto "github.com/kalmeshbhavi/shipper/vessel-service/proto/vessel"
 	"github.com/micro/go-micro"
-
-	"golang.org/x/net/context"
+	"log"
+	"os"
 )
 
-type IRepository interface {
-
-	Create(*pb.Consignment) (*pb.Consignment, error)
-	GetAll() []*pb.Consignment
-}
-
-type Repository struct {
-	consignments []*pb.Consignment
-}
-
-func (repo *Repository) Create(consignment *pb.Consignment) (*pb.Consignment, error) {
-	updated := append(repo.consignments, consignment)
-	repo.consignments = updated
-	return consignment, nil
-}
-
-func (repo *Repository) GetAll() []*pb.Consignment {
-	return repo.consignments
-}
-
-type service struct {
-	repo IRepository
-	vesselClient vesselProto.VesselServiceClient
-}
-
-func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
-	consignment, err := s.repo.Create(req)
-
-	if err != nil {
-		return  err
-	}
-	res.Created = true
-	res.Consignment = consignment
-	return nil
-}
-
-func (s *service) GetConsignments(ctx context.Context, req *pb.GetRequest, res *pb.Response) error {
-	consignments := s.repo.GetAll()
-	res.Consignments = consignments
-	return nil
-}
+const defaultHost  = "localhost:27017"
 
 func main() {
-	repo := &Repository{}
+
+	host := os.Getenv("DB_HOST")
+
+	if host == "" {
+		host = defaultHost
+	}
+
+	session, err := CreateSession(host)
+
+	defer session.Close()
+
+	if err != nil {
+		log.Panicf("Could not connect to datastore with host %s - %v", host, err)
+	}
 
 	srv := micro.NewService(
 		micro.Name("go.micro.srv.consignment"),
 		micro.Version("latest"),
 	)
 
-	vesselClient := vesselProto.NewVesselServiceClient("go.micro.srv.vessel", srv.Client())
+	vesselServiceClient := vesselProto.NewVesselServiceClient("go.micro.srv.vessel", srv.Client())
+
 	srv.Init()
 
-	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
+	pb.RegisterShippingServiceHandler(srv.Server(), &handler{session, vesselServiceClient})
 
-	if err := srv.Run(); err != nil {
+	err= srv.Run()
+
+	if err != nil {
 		fmt.Println(err)
 	}
 }

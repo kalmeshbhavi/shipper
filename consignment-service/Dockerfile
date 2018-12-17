@@ -20,7 +20,7 @@ RUN go get -u github.com/golang/dep/cmd/dep
 COPY Gopkg.toml Gopkg.lock ./
 RUN dep ensure -v -vendor-only
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo .
+RUN CGO_ENABLED=0 GOOS=linux go build  -o consignment-service -a -installsuffix cgo main.go repository.go handler.go datastore.go
 
 FROM alpine:latest
 
